@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Business Insights')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <h2 class="page-heading">📊 Business Insights</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><h3 th:text="${totalProducts}">0</h3><p>Total Products</p></div>
+            <div class="stat-card"><h3 th:text="${totalReviews}">0</h3><p>Total Reviews</p></div>
+            <div class="stat-card"><h3 th:text="${totalUsers}">0</h3><p>Registered Users</p></div>
+            <div class="stat-card"><h3 th:text="${totalCustomize}">0</h3><p>Custom Requests</p></div>
+        </div>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

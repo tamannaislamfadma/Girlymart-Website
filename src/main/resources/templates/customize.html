@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Customize')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <div class="auth-card">
+            <h2>🎨 Customize Your Order</h2>
+            <div th:if="${param.submitted}" class="alert success">Your request has been submitted! We'll contact you on WhatsApp.</div>
+            <form th:action="@{/customize/submit}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <label>Reference Image (optional)</label>
+                <input type="file" name="image" accept="image/*"/>
+                <label>Description</label>
+                <textarea name="description" rows="5" placeholder="Describe what you want..." required></textarea>
+                <label>WhatsApp Number</label>
+                <input type="text" name="whatsappNumber" placeholder="01XXXXXXXXX" required/>
+                <button type="submit" class="btn-pink full-width">Submit Request</button>
+            </form>
+        </div>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

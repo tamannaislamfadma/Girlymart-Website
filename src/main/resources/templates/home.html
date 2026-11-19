@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: reviewModal}"></div>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <main class="main-content">
+
+        <div class="hero-slider" th:if="${!heroBanners.isEmpty()}">
+            <div class="slides">
+                <div class="slide" th:each="banner : ${heroBanners}">
+                    <img th:src="${banner.imageUrl}" alt="Banner"/>
+                </div>
+            </div>
+            <button class="prev" onclick="changeSlide(-1,'hero')">&#10094;</button>
+            <button class="next" onclick="changeSlide(1,'hero')">&#10095;</button>
+        </div>
+
+        <section class="section-title">🎀 Special Offers</section>
+        <div class="ad-carousel" th:if="${!adBanners.isEmpty()}">
+            <div class="ad-track" id="adTrack">
+                <div class="ad-item" th:each="ad : ${adBanners}">
+                    <img th:src="${ad.imageUrl}" alt="Ad"/>
+                </div>
+            </div>
+        </div>
+
+        <section class="section-title">⭐ Customer Reviews</section>
+        <div class="reviews-preview">
+            <div class="review-card" th:each="review : ${reviews}" th:if="${reviewStat.index < 4}">
+                <img th:if="${review.photoUrl != null}" th:src="${review.photoUrl}" alt="Review"/>
+                <p th:text="${review.description}">Review text</p>
+            </div>
+            <a th:href="@{/reviews}" class="see-all-btn">See All Reviews →</a>
+        </div>
+
+        <section class="section-title">🛍️ All Products</section>
+        <div class="product-grid">
+            <div class="product-card" th:each="product : ${products}">
+
+                <a th:href="@{/product/{id}(id=${product.id})}" style="text-decoration:none; display:block;">
+                    <img th:src="${product.imageUrl != null ? product.imageUrl : '/images/placeholder.png'}" alt="Product"/>
+                </a>
+
+                <div class="product-info">
+                    <a th:href="@{/product/{id}(id=${product.id})}" style="text-decoration:none; color:inherit;">
+                        <h3 th:text="${product.name}">Product Name</h3>
+                    </a>
+
+                    <p class="price" th:text="'৳ ' + ${product.price}">৳ 0</p>
+                    <p class="category" th:text="${product.category}">Category</p>
+
+                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn-pink">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

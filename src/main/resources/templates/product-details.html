@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${product.name})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+
+        <div class="product-profile-container">
+            <div class="product-image-box">
+                <img th:src="${product.imageUrl != null ? product.imageUrl : '/images/placeholder.png'}" alt="Product Image"/>
+            </div>
+
+            <div class="product-details-box">
+                <h1 th:text="${product.name}">Product Name</h1>
+                <h2 class="price-large" th:text="'TK. ' + ${product.price}">TK. 0</h2>
+                <p style="color: #888; font-size: 13px; text-transform: uppercase; margin-bottom: 20px;" th:text="'CATEGORY: ' + ${product.category}">CATEGORY</p>
+
+                <form id="buyForm" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">
+
+                    <div th:if="${product.category == 'Bangles'}" class="size-options">
+                        <label>SIZE:</label>
+                        <button type="button" class="size-btn" onclick="selectSize(this, '22')">S=22</button>
+                        <button type="button" class="size-btn" onclick="selectSize(this, '24')">M=24</button>
+                        <button type="button" class="size-btn" onclick="selectSize(this, '26')">L=26</button>
+                        <button type="button" class="size-btn" onclick="selectSize(this, '28')">XL=28</button>
+                        <button type="button" class="size-btn" onclick="selectSize(this, '30')">XXL=30</button>
+                    </div>
+
+                    <div th:if="${product.category == 'Crochet Bag'}" class="size-options">
+                        <label>SIZE: <span th:text="${product.sizeInfo}" style="font-weight:bold; color:#333;"></span></label>
+                        <input type="hidden" name="selectedSize" th:value="${product.sizeInfo}">
+                    </div>
+
+                    <div th:if="${product.category == 'Crochet Cat Outfit'}" class="size-options">
+                        <label>WEIGHT: <span th:text="${product.sizeInfo}" style="font-weight:bold; color:#333;"></span></label>
+                        <input type="hidden" name="selectedSize" th:value="${product.sizeInfo}">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="submit" class="btn-action btn-cart" th:formaction="@{/cart/add/{id}(id=${product.id})}">
+                            <i class="fas fa-shopping-bag"></i> ADD TO CART
+                        </button>
+                        <button type="submit" class="btn-action btn-buy" th:formaction="@{/checkout/{id}(id=${product.id})}">
+                            <i class="fas fa-bolt"></i> BUY NOW
+                        </button>
+                        <a href="https://wa.me/8801863624930" target="_blank" class="btn-action btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> CONTACT US
+                        </a>
+                    </div>
+                </form>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+                <h3>Product Details</h3>
+                <p class="product-description" th:text="${product.description}"></p>
+            </div>
+        </div>
+
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+<script>
+    function selectSize(btn, size) {
+        // Remove active class from all buttons
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        // Set the hidden input value
+        document.getElementById('selectedSizeInput').value = size;
+    }
+</script>
+</body>
+</html>

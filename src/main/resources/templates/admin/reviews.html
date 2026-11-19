@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manage Reviews')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <h2 class="page-heading">⭐ Manage Reviews</h2>
+        <table class="admin-table">
+            <thead>
+            <tr><th>Photo</th><th>Description</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="review : ${reviews}">
+                <td><img th:if="${review.photoUrl != null}" th:src="${review.photoUrl}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;" alt=""/></td>
+                <td th:text="${review.description}"></td>
+                <td>
+                    <span th:if="${review.approved}" style="color:green;">✅ Approved</span>
+                    <span th:if="${!review.approved}" style="color:orange;">⏳ Pending</span>
+                </td>
+                <td th:text="${review.createdAt}"></td>
+                <td>
+                    <a th:if="${!review.approved}" th:href="@{/admin/reviews/approve/{id}(id=${review.id})}" class="btn-pink">Approve</a>
+                    <a th:href="@{/admin/reviews/delete/{id}(id=${review.id})}"
+                       onclick="return confirm('Delete this review?')" class="btn-danger">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

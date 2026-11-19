@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reviews')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: reviewModal}"></div>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <h2 class="page-heading">⭐ Customer Reviews</h2>
+        <div th:if="${param.submitted}" class="alert success">Review submitted! Pending approval.</div>
+        <div class="reviews-grid">
+            <div class="review-card-full" th:each="review : ${reviews}">
+                <img th:if="${review.photoUrl != null}" th:src="${review.photoUrl}" alt="Review Photo"/>
+                <p th:if="${review.description != null}" th:text="${review.description}"></p>
+                <small th:text="${review.createdAt}"></small>
+            </div>
+        </div>
+        <div th:if="${reviews.isEmpty()}" class="empty-msg">No reviews yet. Be the first!</div>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <h2 class="page-heading">⚙️ Admin Dashboard</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><h3 th:text="${productCount}">0</h3><p>Products</p></div>
+            <div class="stat-card"><h3 th:text="${reviewCount}">0</h3><p>Reviews</p></div>
+            <div class="stat-card"><h3 th:text="${customizeCount}">0</h3><p>Custom Requests</p></div>
+            <div class="stat-card"><h3 th:text="${userCount}">0</h3><p>Users</p></div>
+        </div>
+        <div class="admin-links">
+            <a th:href="@{/admin/products}" class="btn-pink">Manage Products</a>
+            <a th:href="@{/admin/reviews}" class="btn-pink">Manage Reviews</a>
+            <a th:href="@{/admin/banners}" class="btn-pink">Manage Banners</a>
+            <a th:href="@{/admin/customize-requests}" class="btn-pink">View Custom Requests</a>
+            <a th:href="@{/admin/insights}" class="btn-pink">Business Insights</a>
+        </div>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

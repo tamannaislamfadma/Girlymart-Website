@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Checkout')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <main class="main-content">
+        <h2 class="page-heading">💳 Secure Checkout</h2>
+
+        <form th:action="@{/checkout/confirm}" method="post" class="checkout-container">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" name="productId" th:value="${product.id}"/>
+            <input type="hidden" name="selectedSize" th:value="${selectedSize}"/>
+
+            <div class="checkout-left">
+                <div class="checkout-card">
+                    <h3>1. Delivery Details</h3>
+                    <label>Full Name</label>
+                    <input type="text" name="customerName" th:value="${user.name}" required/>
+
+                    <label>Contact Number</label>
+                    <input type="text" name="customerPhone" th:value="${user.deliveryPhone != null ? user.deliveryPhone : user.phone}" required/>
+
+                    <label>Full Delivery Address</label>
+                    <textarea name="customerAddress" rows="3" required th:text="${user.address}"></textarea>
+                </div>
+
+                <div class="checkout-card">
+                    <h3>2. Payment Method</h3>
+                    <div class="radio-group">
+                        <input type="radio" id="cod" name="paymentMethod" value="COD" checked>
+                        <label for="cod">Cash on Delivery (Pay when you receive)</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="bkash" name="paymentMethod" value="BKASH">
+                        <label for="bkash">Bkash Payment (Agent will contact you)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-right">
+                <div class="checkout-summary-card">
+                    <h3>Order Summary</h3>
+
+                    <div class="summary-product">
+                        <img th:src="${product.imageUrl != null ? product.imageUrl : '/images/placeholder.png'}" alt="Product"/>
+                        <div>
+                            <h4 th:text="${product.name}"></h4>
+                            <p th:if="${selectedSize != null and selectedSize != ''}" th:text="'Selected: ' + ${selectedSize}" style="font-size: 12px; color: #666;"></p>
+                            <p style="color: #e91e8c; font-weight: bold;" th:text="'৳ ' + ${product.price}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <label style="margin-top: 15px; display: block; font-weight: bold;">Select Delivery Area:</label>
+                    <select name="deliveryArea" id="deliveryArea" onchange="updateTotal()" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ffb6c1; margin-bottom: 15px;">
+                        <option value="Inside Dhaka" data-charge="80">Inside Dhaka (৳ 80)</option>
+                        <option value="Outside Dhaka" data-charge="130">Outside Dhaka (৳ 130)</option>
+                    </select>
+
+                    <div class="totals-row">
+                        <span>Subtotal:</span>
+                        <span>৳ <span id="subtotal" th:text="${product.price}"></span></span>
+                    </div>
+                    <div class="totals-row">
+                        <span>Delivery Charge:</span>
+                        <span>৳ <span id="deliveryDisplay">80</span></span>
+                    </div>
+                    <hr>
+                    <div class="totals-row total-final">
+                        <span>Total Amount:</span>
+                        <span>৳ <span id="totalDisplay" th:text="${product.price + 80}"></span></span>
+                    </div>
+
+                    <button type="submit" class="btn-pink full-width" style="margin-top: 20px; font-size: 16px; padding: 12px;">Confirm Order</button>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+<script>
+    function updateTotal() {
+        var subtotal = parseFloat(document.getElementById('subtotal').innerText);
+        var selectBox = document.getElementById('deliveryArea');
+        var selectedOption = selectBox.options[selectBox.selectedIndex];
+        var deliveryCharge = parseFloat(selectedOption.getAttribute('data-charge'));
+
+        document.getElementById('deliveryDisplay').innerText = deliveryCharge;
+        document.getElementById('totalDisplay').innerText = subtotal + deliveryCharge;
+    }
+</script>
+</body>
+</html>
